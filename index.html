@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gov ERP System</title>
+
+  <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="./manifest.json">
+
+  <meta name="theme-color" content="#007bff">
+</head>
+
+<body>
+
+<header class="app-header">
+  <h2>🏛️ Government ERP System</h2>
+
+  <div class="header-controls">
+    <button onclick="toggleDarkMode()">🌙</button>
+    <button onclick="openAIConsole()">🤖 AI</button>
+    <button onclick="syncNow()">🔄 Sync</button>
+  </div>
+</header>
+
+<section id="loginBox">
+  <h3>Login</h3>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="doLogin()">Login</button>
+</section>
+
+<main id="app"></main>
+
+<div id="assistant-toast"></div>
+
+<script src="./db.js"></script>
+<script src="./auth.js"></script>
+<script src="./sync.js"></script>
+<script src="./ai.js"></script>
+<script src="./realtime.js"></script>
+<script src="./analytics.js"></script>
+<script src="./script.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+</script>
+
+</body>
+</html>
