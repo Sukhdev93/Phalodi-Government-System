@@ -1,0 +1,313 @@
+
+/* ==========================================
+   🎨 BASE SYSTEM RESET (FIXED)
+========================================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    background-color: #ffffff;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================
+   🧭 HEADER
+========================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #007bff;
+    color: #fff;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.header-controls button {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 10px;
+}
+
+/* ==========================================
+   🤖 TOAST FIXED
+========================================== */
+#assistant-toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    font-weight: bold;
+    font-size: 14px;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ==========================================
+   🧾 CONTACT CARD (FIXED LAYOUT)
+========================================== */
+.contact-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ==========================================
+   👤 AVATAR FIXED
+========================================== */
+.avatar-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* ==========================================
+   🏷 DUTY BADGE
+========================================== */
+.duty-badge {
+    background: #ffc107;
+    color: #000;
+    font-size: 11px;
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* ==========================================
+   🎛 ACTION BUTTONS
+========================================== */
+.contact-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-icon {
+    font-size: 18px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.star-icon {
+    font-size: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.star-icon:hover {
+    transform: scale(1.2);
+}
+
+/* ==========================================
+   📥 DROPDOWN FIX
+========================================== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: #fff;
+    min-width: 160px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-content a:hover {
+    background: #f1f1f1;
+}
+
+.show-dropdown {
+    display: block !important;
+}
+
+/* ==========================================
+   🪟 MODAL FIXED
+========================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+}
+
+/* ==========================================
+   📄 TEXT AREA
+========================================== */
+.meeting-draft-area {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-family: monospace;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ==========================================
+   🪪 DUTY PASS CARD (CLEAN FIX)
+========================================== */
+.duty-pass-card {
+    width: 300px;
+    height: 420px;
+    margin: auto;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    background: #fff;
+}
+
+/* ==========================================
+   ⬆ BACK TO TOP
+========================================== */
+#back-to-top {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ==========================================
+   🌙 DARK MODE (FULL FIX)
+========================================== */
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode .app-header {
+    background: #1f6feb;
+}
+
+body.dark-mode .contact-card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .dropdown-content {
+    background: #2a2a2a;
+}
+
+body.dark-mode .dropdown-content a {
+    color: #fff;
+}
+
+body.dark-mode .modal-content {
+    background: #1e1e1e;
+    color: #fff;
+}
+
+body.dark-mode .duty-pass-card {
+    background: #1e1e1e;
+    color: #fff;
+}
+
+/* ==========================================
+   📱 RESPONSIVE FIX
+========================================== */
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .contact-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+
+    #back-to-top {
+        bottom: 150px;
+    }
+}
