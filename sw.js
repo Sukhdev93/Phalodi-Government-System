@@ -1,7 +1,11 @@
 
+// ==========================================
+// 🚀 PWA SERVICE WORKER - LEVEL 16 UPGRADE
+// ==========================================
+
 const CACHE_NAME = "collectorate-pwa-v16";
 
-// Core app files (must be cached)
+// Core app shell (offline-first)
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -10,28 +14,32 @@ const CORE_ASSETS = [
   "./manifest.json"
 ];
 
-// External CDN assets (cached but safely handled)
+// External CDN assets (cached with fallback)
 const CDN_ASSETS = [
   "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
 ];
 
-// ===============================
-// 📦 INSTALL EVENT (FAST CACHE)
-// ===============================
-self.addEventListener("install", (event) => {
-  self.skipWaiting();
+// Combine all
+const ASSETS = [...CORE_ASSETS, ...CDN_ASSETS];
 
+// ==========================================
+// 📦 INSTALL EVENT (CACHE FIRST LOAD)
+// ==========================================
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([...CORE_ASSETS, ...CDN_ASSETS]);
+      return cache.addAll(ASSETS);
     })
   );
+
+  // Force immediate activation
+  self.skipWaiting();
 });
 
-// ===============================
-// 🔄 ACTIVATE EVENT (CACHE CLEANUP FIXED)
-// ===============================
+// ==========================================
+// 🔄 ACTIVATE EVENT (CLEAN OLD CACHE)
+// ==========================================
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -48,41 +56,91 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// ===============================
-// 🌐 FETCH STRATEGY (SMART OFFLINE)
-// ===============================
+// ==========================================
+// 🌐 FETCH STRATEGY (SMART HYBRID)
+// ==========================================
 self.addEventListener("fetch", (event) => {
-  const requestUrl = event.request.url;
+  const request = event.request;
 
-  // 🔥 Always bypass cache for live spreadsheet data
-  if (requestUrl.includes("spreadsheets")) {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return new Response(
-          JSON.stringify({ error: "Offline - No live data available" }),
-          { headers: { "Content-Type": "application/json" } }
-        );
-      })
-    );
+  // 🚫 Always bypass cache for spreadsheet / live API data
+  if (request.url.includes("spreadsheets") || request.url.includes("api")) {
+    event.respondWith(fetch(request));
     return;
   }
 
-  // ⚡ NETWORK FIRST for HTML (fresh updates)
-  if (event.request.destination === "document") {
-    event.respondWith(networkFirst(event.request));
+  // 🧠 Network first, cache fallback for HTML & JS
+  if (request.destination === "document" || request.destination === "script") {
+    event.respondWith(networkFirst(request));
     return;
   }
 
-  // 📦 CACHE FIRST for assets
-  event.respondWith(cacheFirst(event.request));
+  // 🧱 Cache first for static assets
+  event.respondWith(cacheFirst(request));
 });
 
-// ===============================
+// ==========================================
 // ⚡ NETWORK FIRST STRATEGY
-// ===============================
+// ==========================================
 async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
-
     const cache = await caches.open(CACHE_NAME);
-    cache
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    const cached = await caches.match(request);
+    return cached || offlineFallback();
+  }
+}
+
+// ==========================================
+// 🧱 CACHE FIRST STRATEGY
+// ==========================================
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(CACHE_NAME);
+    cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    return offlineFallback();
+  }
+}
+
+// ==========================================
+// 📴 OFFLINE FALLBACK
+// ==========================================
+function offlineFallback() {
+  return new Response(
+    `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Offline</title>
+      <style>
+        body { font-family: Arial; text-align:center; padding:50px; }
+      </style>
+    </head>
+    <body>
+      <h2>📴 You are Offline</h2>
+      <p>Please check your internet connection.</p>
+    </body>
+    </html>
+    `,
+    {
+      headers: { "Content-Type": "text/html" }
+    }
+  );
+}
+
+// ==========================================
+// 🔔 OPTIONAL: AUTO UPDATE NOTIFICATION HOOK
+// ==========================================
+self.addEventListener("message", (event) => {
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
